@@ -6,6 +6,6 @@ RSpec.describe MacSay do
   end
 
   specify do
-    expect(MacSay.say('yukkuri shine!!!')).to be_nil
+    expect(MacSay).to be_respond_to(:say)
   end
 end

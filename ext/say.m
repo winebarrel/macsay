@@ -1,9 +1,9 @@
 #include <unistd.h>
 #import <Cocoa/Cocoa.h>
 
-#define WAIT 0.1
+#define WAIT 100000 // µs
 
-void *say(char *cmsg, char *cvoice) {
+void say(char *cmsg, char *cvoice) {
   NSAutoreleasePool *pool;
   NSSpeechSynthesizer* speech;
   NSString *voice, *msg;
@@ -23,13 +23,13 @@ void *say(char *cmsg, char *cvoice) {
   [speech startSpeakingString: msg];
 
   while ([speech isSpeaking]) {
-    sleep(WAIT);
+    usleep(WAIT);
   }
 
   [pool release];
 }
 
-void available_voices(void (*func)(void *, char *), void *data) {
+void available_voices(void (*func)(void *, const char *), void *data) {
   NSAutoreleasePool *pool;
   NSArray *voices;
   NSEnumerator *itor;
@@ -41,7 +41,7 @@ void available_voices(void (*func)(void *, char *), void *data) {
   itor = [voices objectEnumerator];
 
   while (voice = [itor nextObject]) {
-    char *cvoice = [voice UTF8String];
+    const char *cvoice = [voice UTF8String];
     func(data, cvoice);
   }
 
